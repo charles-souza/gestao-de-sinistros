@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PessoaDTO implements Serializable{
+public class EmpresaDTO implements Serializable{
 	
 	/**
 	 * 
@@ -26,22 +26,15 @@ public class PessoaDTO implements Serializable{
 	private Long id;
 	
 	@NotEmpty
-	private String nome;
+	private String razaoSocial;
 	
 	@NotEmpty
-	private String sobrenome;
+	private String nomeFantasia;
 	
+	@NotNull
 	private Endereco endereco;
 	
 	@NotEmpty
-	private String rg;
-	private String emissor;
-	private String expedicao;
-	private String cpf;
-	private String sexo;
-	private String email;
-	private String estadoCivil;
-	private Date dataNascimento;
-	private Date dataRegistro;
+	private String cnpj;
 
 }

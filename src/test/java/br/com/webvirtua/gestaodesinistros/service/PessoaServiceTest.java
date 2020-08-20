@@ -16,6 +16,8 @@ import br.com.webvirtua.gestaodesinistros.service.impl.PessoaServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.assertj.core.api.Assertions;
 
 @ExtendWith(SpringExtension.class)
@@ -39,7 +41,7 @@ public class PessoaServiceTest {
 		Pessoa pessoa = createValidPessoa();
 		Mockito.when( repository.existsById(Mockito.anyLong()) ).thenReturn(false);
 		Mockito.when(repository.save(pessoa))
-				.thenReturn(Pessoa.builder().id((long) 1).nome("Charles").sobrenome("Souza").build());
+				.thenReturn(Pessoa.builder().id(1l).nome("Charles").sobrenome("Souza").build());
 
 		// execução
 		Pessoa savedPessoa = service.save(pessoa);
@@ -51,7 +53,7 @@ public class PessoaServiceTest {
 	}
 
 	private Pessoa createValidPessoa() {
-		return Pessoa.builder().nome("Charles").sobrenome("Souza").build();
+		return Pessoa.builder().id(1l).nome("Charles").sobrenome("Souza").build();
 	}
 	
 	@Test
@@ -72,6 +74,92 @@ public class PessoaServiceTest {
 		Mockito.verify(repository, Mockito.never()).save(pessoa);
 	}
 	
+	@Test
+	@DisplayName("Deve obter uma pessoa por Id")
+	public void getByIdTest() {
+		Long id = 1l;
+		
+		Pessoa pessoa = createValidPessoa();
+		pessoa.setId(id);
+		Mockito.when(repository.findById(id)).thenReturn(Optional.of(pessoa));
+		
+		//execucao
+		Optional<Pessoa> foundPessoa = service.getById(id);
+		
+		//verificacoes
+		assertThat( foundPessoa.isPresent() ).isTrue();
+		assertThat( foundPessoa.get().getId() ).isEqualTo(id);
+		assertThat( foundPessoa.get().getNome() ).isEqualTo(pessoa.getNome());
+		assertThat( foundPessoa.get().getSobrenome() ).isEqualTo(pessoa.getSobrenome());
+	}
 	
+	@Test
+	@DisplayName("Deve retornar vazio ao obter uma pessoa por Id quando ele não existe na base.")
+	public void pessoaNotFoundByIdTest() {
+		Long id = 1l;
+		
+		Mockito.when(repository.findById(id)).thenReturn(Optional.empty());
+		
+		//execucao
+		Optional<Pessoa> foundPessoa = service.getById(id);
+		
+		//verificacoes
+		assertThat( foundPessoa.isPresent() ).isFalse();
+	}
+	
+	@Test
+	@DisplayName("Deve deletar uma pessoa.")
+	public void deletePessoaTest() {		
+		Pessoa pessoa = Pessoa.builder().id(1l).build();
+		
+		//execucao
+		org.junit.jupiter.api.Assertions.assertDoesNotThrow( () -> service.delete(pessoa) ); 
+		
+		//verificacoes
+		Mockito.verify(repository, Mockito.times(1)).delete(pessoa);		
+	}
+	
+	@Test
+	@DisplayName("Deve ocorrer erro ao tentar deletar uma pessoa inexistente")
+	public void deleteInvalidPessoaTest() {		
+		Pessoa pessoa = new Pessoa();
+		
+		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> service.delete(pessoa));
+		
+		Mockito.verify(repository, Mockito.never()).delete(pessoa);
+	}
+	
+	@Test
+	@DisplayName("Deve ocorrer erro ao tentar atualizar uma pessoa inexistente")
+	public void updateInvalidPessoaTest() {		
+		Pessoa pessoa = new Pessoa();
+		
+		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> service.update(pessoa));
+		
+		Mockito.verify(repository, Mockito.never()).save(pessoa);
+	}
+	
+	@Test
+	@DisplayName("Deve atualizar uma pessoa.")
+	public void updatePessoaTest() {		
+		long id = 1l;
+		
+		//pessoa a atualizar
+		Pessoa updatingPessoa = Pessoa.builder().id(id).build();
+		
+		//simulacao
+		Pessoa updatedPessoa = createValidPessoa();
+		updatedPessoa.setId(id);
+		
+		Mockito.when(repository.save(updatingPessoa)).thenReturn(updatedPessoa);
+		
+		//execucao
+		Pessoa pessoa = service.update(updatingPessoa);
+		
+		//verificacoes
+		assertThat(pessoa.getId()).isEqualTo(updatedPessoa.getId());
+		assertThat(pessoa.getNome()).isEqualTo(updatedPessoa.getNome());
+		assertThat(pessoa.getSobrenome()).isEqualTo(updatedPessoa.getSobrenome());
+	}
 
 }

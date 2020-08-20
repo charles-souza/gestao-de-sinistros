@@ -24,68 +24,63 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.webvirtua.gestaodesinistros.api.dto.EmpresaDTO;
 import br.com.webvirtua.gestaodesinistros.api.dto.PessoaDTO;
 import br.com.webvirtua.gestaodesinistros.api.exception.ApiErrors;
 import br.com.webvirtua.gestaodesinistros.exception.BusinessException;
+import br.com.webvirtua.gestaodesinistros.model.entity.Empresa;
 import br.com.webvirtua.gestaodesinistros.model.entity.Pessoa;
+import br.com.webvirtua.gestaodesinistros.service.EmpresaService;
 import br.com.webvirtua.gestaodesinistros.service.PessoaService;
 
 @RestController
-@RequestMapping("/api/pessoas")
-public class PessoaController {
+@RequestMapping("/api/empresas")
+public class EmpresaController {
 	
-	private PessoaService service;
+	private EmpresaService service;
 	private ModelMapper modelMapper;
 	
-	public PessoaController(PessoaService service, ModelMapper mapper) {
+	public EmpresaController(EmpresaService service, ModelMapper mapper) {
 		this.service = service;
 		this.modelMapper = mapper;
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public PessoaDTO create( @RequestBody @Valid PessoaDTO dto ) {
-		Pessoa entity = modelMapper.map( dto, Pessoa.class );
+	public EmpresaDTO create( @RequestBody @Valid EmpresaDTO dto ) {
+		Empresa entity = modelMapper.map( dto, Empresa.class );
 		
 		entity = service.save(entity);
 	
-		return modelMapper.map( entity, PessoaDTO.class );
+		return modelMapper.map( entity, EmpresaDTO.class );
 	}
 	
 	@GetMapping("{id}")
-	public PessoaDTO get(@PathVariable Long id) {
+	public EmpresaDTO get(@PathVariable Long id) {
 		
 		return service
 				.getById(id)
-				.map( pessoa -> modelMapper.map(pessoa, PessoaDTO.class) )
+				.map( empresa -> modelMapper.map(empresa, EmpresaDTO.class) )
 				.orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND) );	
 	}
 	
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
-		Pessoa pessoa = service.getById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-		service.delete(pessoa);
+		Empresa empresa = service.getById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		service.delete(empresa);
 	}
 	
 	@PutMapping("{id}")
-	public PessoaDTO update( @PathVariable Long id, PessoaDTO dto ) {
-		return service.getById(id).map( pessoa -> { 
+	public EmpresaDTO update( @PathVariable Long id, EmpresaDTO dto ) {
+		return service.getById(id).map( empresa -> { 
 			
-			pessoa.setNome(dto.getNome());
-			pessoa.setSobrenome(dto.getSobrenome());
-			pessoa.setEndereco(dto.getEndereco());
-			pessoa.setRg(dto.getRg());
-			pessoa.setEmissor(dto.getEmissor());
-			pessoa.setExpedicao(dto.getExpedicao());
-			pessoa.setCpf(dto.getCpf());
-			pessoa.setSexo(dto.getSexo());
-			pessoa.setEmail(dto.getEmail());
-			pessoa.setEstadoCivil(dto.getEstadoCivil());
-			pessoa.setDataNascimento(dto.getDataNascimento());
-			pessoa.setDataRegistro(dto.getDataRegistro());
-			pessoa = service.update(pessoa);
-			return modelMapper.map(pessoa, PessoaDTO.class);
+			empresa.setRazaoSocial(dto.getRazaoSocial());
+			empresa.setNomeFantasia(dto.getNomeFantasia());
+			empresa.setEndereco(dto.getEndereco());
+			empresa.setCnpj(dto.getCnpj());
+			empresa = service.update(empresa);
+			return modelMapper.map(empresa, EmpresaDTO.class);
 			
 			
 		} ).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -109,15 +104,15 @@ public class PessoaController {
 	}
 	
 	@GetMapping
-	public Page<PessoaDTO> find( PessoaDTO dto, Pageable pageRequest ) {
-		Pessoa filter = modelMapper.map(dto, Pessoa.class);
-		Page<Pessoa> result = service.find(filter, pageRequest);
-		List<PessoaDTO> list = result.getContent()
+	public Page<EmpresaDTO> find( EmpresaDTO dto, Pageable pageRequest ) {
+		Empresa filter = modelMapper.map(dto, Empresa.class);
+		Page<Empresa> result = service.find(filter, pageRequest);
+		List<EmpresaDTO> list = result.getContent()
 				.stream()
-				.map( entity -> modelMapper.map(entity, PessoaDTO.class) )
+				.map( entity -> modelMapper.map(entity, EmpresaDTO.class) )
 				.collect( Collectors.toList());
 		
-		return new PageImpl<PessoaDTO>( list, pageRequest, result.getTotalElements() );
+		return new PageImpl<EmpresaDTO>( list, pageRequest, result.getTotalElements() );
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)

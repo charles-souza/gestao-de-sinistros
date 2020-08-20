@@ -23,11 +23,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table
-public class Pessoa implements Serializable{
+public class Seguradora implements Serializable{
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 989935518526943227L;
+	private static final long serialVersionUID = -2244800428123985474L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,19 +36,13 @@ public class Pessoa implements Serializable{
 	
 	private String nome;
 	
-	private String sobrenome;
+	private String nomeComercial;
+	
+	private String ramoDeAtividade;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="endereco_id", referencedColumnName="id")
-	private Endereco endereco;
+	@JoinColumn(name="telefone_id", referencedColumnName="id")
+	private Telefone telefone;
 	
-	private String rg;
-	private String emissor;
-	private String expedicao;
-	private String cpf;
-	private String sexo;
-	private String email;
-	private String estadoCivil;
-	private Date dataNascimento;
 	private Date dataRegistro;
 }

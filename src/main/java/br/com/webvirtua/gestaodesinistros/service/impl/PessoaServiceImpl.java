@@ -1,5 +1,9 @@
 package br.com.webvirtua.gestaodesinistros.service.impl;
 
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.webvirtua.gestaodesinistros.exception.BusinessException;
@@ -10,7 +14,7 @@ import br.com.webvirtua.gestaodesinistros.service.PessoaService;
 @Service
 public class PessoaServiceImpl implements PessoaService {
 
-	private PessoaRepository repository;	
+	private PessoaRepository repository;
 
 	public PessoaServiceImpl(PessoaRepository repository) {
 		this.repository = repository;
@@ -23,5 +27,32 @@ public class PessoaServiceImpl implements PessoaService {
 		}
 		return repository.save(pessoa);
 	}
+
+	@Override
+	public Optional<Pessoa> getById(Long id) {
+		return this.repository.findById(id);
+	}
+
+	@Override
+	public void delete(Pessoa pessoa) {
+		if(pessoa == null || pessoa.getId() == null) {
+			throw new IllegalArgumentException("Pessoa id cant be null.");
+		}
+		this.repository.delete(pessoa);		
+	}
+
+	@Override
+	public Pessoa update(Pessoa pessoa) {
+		if(pessoa == null || pessoa.getId() == null) {
+			throw new IllegalArgumentException("Pessoa id cant be null.");
+		}
+		return this.repository.save(pessoa);
+	}
+
+	@Override
+	public Page<Pessoa> find(Pessoa filter, Pageable pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 
 }
