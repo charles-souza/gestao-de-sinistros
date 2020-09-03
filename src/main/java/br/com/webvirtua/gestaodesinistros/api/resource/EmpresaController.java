@@ -34,7 +34,7 @@ import br.com.webvirtua.gestaodesinistros.service.EmpresaService;
 import br.com.webvirtua.gestaodesinistros.service.PessoaService;
 
 @RestController
-@RequestMapping("/api/empresas")
+@RequestMapping("/api/empresas/v1")
 public class EmpresaController {
 	
 	private EmpresaService service;
@@ -72,7 +72,7 @@ public class EmpresaController {
 	}
 	
 	@PutMapping("{id}")
-	public EmpresaDTO update( @PathVariable Long id, EmpresaDTO dto ) {
+	public EmpresaDTO update( @PathVariable Long id, @RequestBody EmpresaDTO dto ) {
 		return service.getById(id).map( empresa -> { 
 			
 			empresa.setRazaoSocial(dto.getRazaoSocial());

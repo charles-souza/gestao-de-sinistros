@@ -22,9 +22,9 @@ public class PessoaServiceImpl implements PessoaService {
 
 	@Override
 	public Pessoa save(Pessoa pessoa) {
-		if( repository.existsById(pessoa.getId()) ) {
-			throw new BusinessException("Id já cadastrado.");
-		}
+//		if( repository.existsById(pessoa.getId()) ) {
+//			throw new BusinessException("Id já cadastrado.");
+//		}
 		return repository.save(pessoa);
 	}
 

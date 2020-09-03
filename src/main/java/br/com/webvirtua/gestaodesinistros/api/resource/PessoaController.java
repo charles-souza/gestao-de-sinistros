@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ import br.com.webvirtua.gestaodesinistros.model.entity.Pessoa;
 import br.com.webvirtua.gestaodesinistros.service.PessoaService;
 
 @RestController
-@RequestMapping("/api/pessoas")
+@RequestMapping("/api/pessoas/v1")
 public class PessoaController {
 	
 	private PessoaService service;
@@ -45,11 +46,28 @@ public class PessoaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PessoaDTO create( @RequestBody @Valid PessoaDTO dto ) {
-		Pessoa entity = modelMapper.map( dto, Pessoa.class );
+		
+//		// Create a TypeMap for your mapping
+//		TypeMap<Pessoa, PessoaDTO> typeMap = 
+//		    modelMapper.createTypeMap(Pessoa.class, PessoaDTO.class);
+//
+//		// Define the mappings on the type map
+//		typeMap.addMappings(mapper -> {
+//		    mapper.map(src -> src.getEndereco().getCep(),
+//		    				  PessoaDTO::setCep);
+//		    mapper.map(src -> src.getEndereco().getLogradouro(),
+//  				  PessoaDTO::setLogradouro);
+//		});
+		
+		Pessoa entity = dto.build();
 		
 		entity = service.save(entity);
+		
+		dto = entity.convert();
+		
+		return dto;
 	
-		return modelMapper.map( entity, PessoaDTO.class );
+		//return modelMapper.map( entity, PessoaDTO.class );
 	}
 	
 	@GetMapping("{id}")
@@ -69,12 +87,12 @@ public class PessoaController {
 	}
 	
 	@PutMapping("{id}")
-	public PessoaDTO update( @PathVariable Long id, PessoaDTO dto ) {
+	public PessoaDTO update( @PathVariable Long id, @RequestBody PessoaDTO dto ) {
 		return service.getById(id).map( pessoa -> { 
 			
 			pessoa.setNome(dto.getNome());
 			pessoa.setSobrenome(dto.getSobrenome());
-			pessoa.setEndereco(dto.getEndereco());
+			//pessoa.setEndereco(dto.getEndereco());
 			pessoa.setRg(dto.getRg());
 			pessoa.setEmissor(dto.getEmissor());
 			pessoa.setExpedicao(dto.getExpedicao());
@@ -88,24 +106,7 @@ public class PessoaController {
 			return modelMapper.map(pessoa, PessoaDTO.class);
 			
 			
-		} ).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//		System.out.println("******************" + dto.getNome());
-		
-//		Pessoa pessoa = service.getById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//			pessoa.setNome(pessoa.getNome());
-//			pessoa.setSobrenome(dto.getSobrenome());
-//			pessoa.setEndereco(dto.getEndereco());
-//			pessoa.setRg(dto.getRg());
-//			pessoa.setEmissor(dto.getEmissor());
-//			pessoa.setExpedicao(dto.getExpedicao());
-//			pessoa.setCpf(dto.getCpf());
-//			pessoa.setSexo(dto.getSexo());
-//			pessoa.setEmail(dto.getEmail());
-//			pessoa.setEstadoCivil(dto.getEstadoCivil());
-//			pessoa.setDataNascimento(dto.getDataNascimento());
-//			pessoa.setDataRegistro(dto.getDataRegistro());
-//			pessoa = service.update(pessoa);
-//			return modelMapper.map(pessoa, PessoaDTO.class);				
+		} ).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));			
 	}
 	
 	@GetMapping
