@@ -2,8 +2,11 @@ package br.com.webvirtua.gestaodesinistros.service.impl;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 import br.com.webvirtua.gestaodesinistros.exception.BusinessException;
@@ -51,8 +54,15 @@ public class PessoaServiceImpl implements PessoaService {
 
 	@Override
 	public Page<Pessoa> find(Pessoa filter, Pageable pageRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		Example<Pessoa> example = Example.of(filter,
+					ExampleMatcher
+							.matching()
+							.withIgnoreCase()
+							.withIgnoreNullValues()
+							.withStringMatcher( StringMatcher.CONTAINING )
+							
+				);
+		return repository.findAll(example , pageRequest);
 	}	
 
 }

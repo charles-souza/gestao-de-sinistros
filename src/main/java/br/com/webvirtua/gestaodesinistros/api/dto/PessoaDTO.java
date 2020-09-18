@@ -31,8 +31,6 @@ public class PessoaDTO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -1244646979381515229L;
-
-//	private Long id;
 	
 	@NotEmpty
 	private String nome;
@@ -57,14 +55,8 @@ public class PessoaDTO implements Serializable{
 	private String sexo;
 	private String email;
 	private String estadoCivil;
-	private Date dataNascimento = new Date();
+	private Date dataNascimento;
 	private Date dataRegistro;
-	
-	
-	public String formatDate() {
-		SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
-		return dataFormatada.format(this.dataNascimento);
-	}
 	
 	public Pessoa build() {
 		Estado estado = new Estado()

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,84 +25,61 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.webvirtua.gestaodesinistros.api.dto.PessoaDTO;
+import br.com.webvirtua.gestaodesinistros.api.dto.ClienteDTO;
 import br.com.webvirtua.gestaodesinistros.api.exception.ApiErrors;
 import br.com.webvirtua.gestaodesinistros.exception.BusinessException;
-import br.com.webvirtua.gestaodesinistros.model.entity.Pessoa;
-import br.com.webvirtua.gestaodesinistros.service.PessoaService;
+import br.com.webvirtua.gestaodesinistros.model.entity.Cliente;
+import br.com.webvirtua.gestaodesinistros.service.ClienteService;
 
 @RestController
-@RequestMapping("/api/pessoas/v1")
-public class PessoaController {
-
-	private PessoaService service;
+@RequestMapping("/v1/clientes")
+public class ClienteController {
+	
+	private ClienteService service;
 	private ModelMapper modelMapper;
-
-	public PessoaController(PessoaService service, ModelMapper mapper) {
+	
+	public ClienteController(ClienteService service, ModelMapper mapper) {
 		this.service = service;
 		this.modelMapper = mapper;
-		
-		PropertyMap<Pessoa, PessoaDTO> pessoaMap = new PropertyMap<Pessoa, PessoaDTO>() {
-			protected void configure() {
-				map().setCep(source.getEndereco().getCep());
-				map(source.getEndereco().getBairro(), destination.getBairro());
-			}
-		};
-
-		modelMapper.addMappings(pessoaMap);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public PessoaDTO create(@RequestBody @Valid PessoaDTO dto) {
-
-//		// Create a TypeMap for your mapping
-//		TypeMap<Pessoa, PessoaDTO> typeMap = 
-//		    modelMapper.createTypeMap(Pessoa.class, PessoaDTO.class);
-//
-//		// Define the mappings on the type map
-//		typeMap.addMappings(mapper -> {
-//		    mapper.map(src -> src.getEndereco().getCep(),
-//		    				  PessoaDTO::setCep);
-//		    mapper.map(src -> src.getEndereco().getLogradouro(),
-//  				  PessoaDTO::setLogradouro);
-//		});
-
+	public ClienteDTO create( @RequestBody @Valid ClienteDTO dto ) {
 		
-
-		Pessoa entity = new Pessoa();// dto.build();
-//		
+		Cliente entity = dto.build();
+		
 		entity = service.save(entity);
-//		
-//		dto = entity.convert();
-
-//		return dto;
-
-		return modelMapper.map(entity, PessoaDTO.class);
+		
+		dto = entity.convertCliente();
+		
+		return dto;
+	
+		//return modelMapper.map( entity, ClienteDTO.class );
 	}
-
+	
 	@GetMapping("{id}")
-	public PessoaDTO get(@PathVariable Long id) {
-
-		Pessoa entity = service.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-		PessoaDTO dto = entity.convert();
-
+	public ClienteDTO get(@PathVariable Long id) {
+		
+		Cliente entity = service.getById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND) );
+		
+		ClienteDTO dto = entity.convertCliente();
+		
 		return dto;
 	}
-
+	
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
-		Pessoa pessoa = service.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-		service.delete(pessoa);
+		Cliente cliente = service.getById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		service.delete(cliente);
 	}
-
+	
 	@PutMapping("{id}")
-	public PessoaDTO update(@PathVariable Long id, @RequestBody PessoaDTO dto) {
-
-		return service.getById(id).map(pessoa -> {
-
+	public ClienteDTO update( @PathVariable Long id, @RequestBody ClienteDTO dto ) {
+		
+		return service.getById(id).map( cliente -> { 
+			
 //			pessoa.setNome(dto.getNome());
 //			pessoa.setSobrenome(dto.getSobrenome());
 //			pessoa.setEndereco(endereco.setCep(dto.getCep()));
@@ -117,35 +93,38 @@ public class PessoaController {
 //			pessoa.setDataNascimento(dto.getDataNascimento());
 //			pessoa.setDataRegistro(dto.getDataRegistro());
 			dto.build();
-			pessoa = service.update(pessoa);
-			return modelMapper.map(pessoa, PessoaDTO.class);
-
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+			cliente = service.update(cliente);
+			return modelMapper.map(cliente, ClienteDTO.class);
+			
+			
+		} ).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));			
 	}
-
+	
 	@GetMapping
-	public Page<PessoaDTO> find(PessoaDTO dto, Pageable pageRequest) {
-		Pessoa filter = modelMapper.map(dto, Pessoa.class);
-		Page<Pessoa> result = service.find(filter, pageRequest);
-		List<PessoaDTO> list = result.getContent().stream().map(entity -> modelMapper.map(entity, PessoaDTO.class))
-				.collect(Collectors.toList());
-
-		return new PageImpl<PessoaDTO>(list, pageRequest, result.getTotalElements());
+	public Page<ClienteDTO> find( ClienteDTO dto, Pageable pageRequest ) {
+		Cliente filter = modelMapper.map(dto, Cliente.class);
+		Page<Cliente> result = service.find(filter, pageRequest);
+		List<ClienteDTO> list = result.getContent()
+				.stream()
+				.map( entity -> modelMapper.map(entity, ClienteDTO.class) )
+				.collect( Collectors.toList());
+		
+		return new PageImpl<ClienteDTO>( list, pageRequest, result.getTotalElements() );
 	}
-
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ApiErrors handleValidationExceptions(MethodArgumentNotValidException ex) {
-		BindingResult bindingResult = ex.getBindingResult();
-
+		BindingResult bindingResult = ex.getBindingResult();		
+				
 		return new ApiErrors(bindingResult);
 	}
-
+	
 	@ExceptionHandler(BusinessException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ApiErrors handleBusinessException(BusinessException ex) {
 		return new ApiErrors(ex);
-
+		
 	}
 
 }

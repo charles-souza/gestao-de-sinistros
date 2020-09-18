@@ -42,7 +42,7 @@ public class Endereco implements Serializable{
 	private String bairro;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="id_endereco", referencedColumnName="id_cidade")
+	@JoinColumn(name="endereco_id", referencedColumnName="id_cidade")
 	private Cidade cidade;
 	
 	private Estado uf;

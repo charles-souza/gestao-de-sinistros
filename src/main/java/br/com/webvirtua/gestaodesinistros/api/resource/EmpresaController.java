@@ -25,13 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.webvirtua.gestaodesinistros.api.dto.EmpresaDTO;
-import br.com.webvirtua.gestaodesinistros.api.dto.PessoaDTO;
 import br.com.webvirtua.gestaodesinistros.api.exception.ApiErrors;
 import br.com.webvirtua.gestaodesinistros.exception.BusinessException;
 import br.com.webvirtua.gestaodesinistros.model.entity.Empresa;
-import br.com.webvirtua.gestaodesinistros.model.entity.Pessoa;
 import br.com.webvirtua.gestaodesinistros.service.EmpresaService;
-import br.com.webvirtua.gestaodesinistros.service.PessoaService;
 
 @RestController
 @RequestMapping("/api/empresas/v1")
@@ -83,24 +80,7 @@ public class EmpresaController {
 			return modelMapper.map(empresa, EmpresaDTO.class);
 			
 			
-		} ).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//		System.out.println("******************" + dto.getNome());
-		
-//		Pessoa pessoa = service.getById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//			pessoa.setNome(pessoa.getNome());
-//			pessoa.setSobrenome(dto.getSobrenome());
-//			pessoa.setEndereco(dto.getEndereco());
-//			pessoa.setRg(dto.getRg());
-//			pessoa.setEmissor(dto.getEmissor());
-//			pessoa.setExpedicao(dto.getExpedicao());
-//			pessoa.setCpf(dto.getCpf());
-//			pessoa.setSexo(dto.getSexo());
-//			pessoa.setEmail(dto.getEmail());
-//			pessoa.setEstadoCivil(dto.getEstadoCivil());
-//			pessoa.setDataNascimento(dto.getDataNascimento());
-//			pessoa.setDataRegistro(dto.getDataRegistro());
-//			pessoa = service.update(pessoa);
-//			return modelMapper.map(pessoa, PessoaDTO.class);				
+		} ).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));			
 	}
 	
 	@GetMapping
