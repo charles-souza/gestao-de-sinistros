@@ -10,51 +10,51 @@ import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 import br.com.webvirtua.gestaodesinistros.exception.BusinessException;
-import br.com.webvirtua.gestaodesinistros.model.entity.Pessoa;
-import br.com.webvirtua.gestaodesinistros.model.repository.PessoaRepository;
-import br.com.webvirtua.gestaodesinistros.service.PessoaService;
+import br.com.webvirtua.gestaodesinistros.model.entity.Client;
+import br.com.webvirtua.gestaodesinistros.model.repository.ClientRepository;
+import br.com.webvirtua.gestaodesinistros.service.ClientService;
 
 @Service
-public class PessoaServiceImpl implements PessoaService {
+public class ClientServiceImpl implements ClientService {
 
-	private PessoaRepository repository;
+	private ClientRepository repository;
 
-	public PessoaServiceImpl(PessoaRepository repository) {
+	public ClientServiceImpl(ClientRepository repository) {
 		this.repository = repository;
 	}
 
 	@Override
-	public Pessoa save(Pessoa pessoa) {
+	public Client save(Client client) {
 //		if( repository.existsById(pessoa.getId()) ) {
 //			throw new BusinessException("Id já cadastrado.");
 //		}
-		return repository.save(pessoa);
+		return repository.save(client);
 	}
 
 	@Override
-	public Optional<Pessoa> getById(Long id) {
+	public Optional<Client> getById(Long id) {
 		return this.repository.findById(id);
 	}
 
 	@Override
-	public void delete(Pessoa pessoa) {
-		if(pessoa == null || pessoa.getId() == null) {
-			throw new IllegalArgumentException("Pessoa id cant be null.");
+	public void delete(Client client) {
+		if(client == null || client.getId() == null) {
+			throw new IllegalArgumentException("Client id cant be null.");
 		}
-		this.repository.delete(pessoa);		
+		this.repository.delete(client);		
 	}
 
 	@Override
-	public Pessoa update(Pessoa pessoa) {
-		if(pessoa == null || pessoa.getId() == null) {
-			throw new IllegalArgumentException("Pessoa id cant be null.");
+	public Client update(Client client) {
+		if(client == null || client.getId() == null) {
+			throw new IllegalArgumentException("Client id cant be null.");
 		}
-		return this.repository.save(pessoa);
+		return this.repository.save(client);
 	}
 
 	@Override
-	public Page<Pessoa> find(Pessoa filter, Pageable pageRequest) {
-		Example<Pessoa> example = Example.of(filter,
+	public Page<Client> find(Client filter, Pageable pageRequest) {
+		Example<Client> example = Example.of(filter,
 					ExampleMatcher
 							.matching()
 							.withIgnoreCase()

@@ -10,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -19,25 +17,32 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table
-public class Pais implements Serializable{
-
+public class City implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3916329331902034790L;
+	private static final long serialVersionUID = 3218645645639481121L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_pais;
+	private Long id_city;
 	
-	private String nm_iniciais;
-	private String nm_nome;
-	private Date dataRegistro;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="city_id", referencedColumnName="id_state")
+	private State uf;
+	
+	private String initials;
+	private String name;
+	private boolean metropolitan;
+	private int code;
+	private Date registerDate;
 }

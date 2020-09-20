@@ -26,23 +26,21 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Entity
 @Table
-public class Cidade implements Serializable{
+public class State implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3218645645639481121L;
+	private static final long serialVersionUID = -2731473028954230434L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_cidade;
+	private Long id_state;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="cidade_id", referencedColumnName="id_estado")
-	private Estado uf;
+	@JoinColumn(name="state_id", referencedColumnName="id_country")
+	private Country country;
 	
-	private String nm_iniciais;
-	private String nm_nome;
-	private boolean nu_metropolitana;
-	private int codigo;
-	private Date dataRegistro;
+	private String initials;
+	private String name;
+	private Date registerDate;
 }

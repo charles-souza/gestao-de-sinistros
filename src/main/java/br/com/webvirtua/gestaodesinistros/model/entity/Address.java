@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -26,7 +25,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Entity
 @Table
-public class Endereco implements Serializable{
+public class Address implements Serializable{
 	/**
 	 * 
 	 */
@@ -36,14 +35,15 @@ public class Endereco implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String cep;
-	private String logradouro;
-	private String complemento;
-	private String bairro;
+	private String street;
+	private int number;
+	private String complement;
+	private String district;
+	private String zipcode;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="endereco_id", referencedColumnName="id_cidade")
-	private Cidade cidade;
+	@JoinColumn(name="address_id", referencedColumnName="id_city")
+	private City city;
 	
-	private Estado uf;
+	private State state;
 }

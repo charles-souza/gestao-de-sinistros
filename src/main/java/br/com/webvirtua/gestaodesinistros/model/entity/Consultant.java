@@ -1,7 +1,6 @@
 package br.com.webvirtua.gestaodesinistros.model.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,13 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import br.com.webvirtua.gestaodesinistros.api.dto.ClienteDTO;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,35 +24,22 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@DiscriminatorValue("cliente")
+@DiscriminatorValue("consultant")
 @Accessors(chain = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table
-public class Cliente extends Pessoa implements Serializable{
+public class Consultant extends Person implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8390791364675938263L;
-
+	private static final long serialVersionUID = -7769427416045450081L;
+	
 //	@Id
 //	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Long id_cliente;
+	private Long idConsultant;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="telefone_id", referencedColumnName="id")
-	private List<Telefone> telefone;
-	
-	private Date dataRegistro;
-	
-	public ClienteDTO convertCliente() {		
-		
-		ClienteDTO clienteDTO = new ClienteDTO()
-//				.setTelefone(this.telefone)
-				.setDataRegistro(this.dataRegistro);
-		
-		return clienteDTO;		
-	}
+	private String password;
 }
