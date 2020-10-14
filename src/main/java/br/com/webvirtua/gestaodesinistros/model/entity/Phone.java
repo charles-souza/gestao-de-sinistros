@@ -26,7 +26,7 @@ public class Phone implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2550929378449149238L;
+	private static final long serialVersionUID = 745870291913985213L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

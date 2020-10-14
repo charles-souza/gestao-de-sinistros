@@ -1,17 +1,17 @@
 package br.com.webvirtua.gestaodesinistros.service;
 
-import br.com.webvirtua.gestaodesinistros.api.dto.PersonDTO;
+import br.com.webvirtua.gestaodesinistros.api.dto.CustumerDTO;
 import br.com.webvirtua.gestaodesinistros.utils.ReturnRequest;
 
-public interface PersonService<C>{
+public interface CustumerService<C>{
 
-	ReturnRequest save(PersonDTO any);
+	ReturnRequest save(CustumerDTO any);
 
 	ReturnRequest getById(Long id);
 
 	ReturnRequest delete(Long id);
 
-	ReturnRequest update(Long id, PersonDTO personDTO);
+	ReturnRequest update(Long id, CustumerDTO personDTO);
 
 	ReturnRequest find();
 

@@ -3,14 +3,17 @@ package br.com.webvirtua.gestaodesinistros.model.entity;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,17 +36,24 @@ public class Address implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(name = "id_address")
+	private Long idAddress;
 	
+	@Column(name = "street")
 	private String street;
+	
+	@Column(name = "number")
 	private int number;
+	
+	@Column(name = "complement")
 	private String complement;
+	
+	@Column(name = "district")
 	private String district;
+	
+	@Column(name = "zipcode")
 	private String zipcode;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="address_id", referencedColumnName="id_city")
-	private City city;
-	
-	private State state;
+	@Column(name = "city_id")
+	private Long cityId;
 }

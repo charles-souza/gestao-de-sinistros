@@ -19,19 +19,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.webvirtua.gestaodesinistros.api.dto.CustumerDTO;
 import br.com.webvirtua.gestaodesinistros.api.dto.PersonDTO;
 import br.com.webvirtua.gestaodesinistros.api.exception.ApiErrors;
 import br.com.webvirtua.gestaodesinistros.exception.BusinessException;
+import br.com.webvirtua.gestaodesinistros.model.entity.Custumer;
 import br.com.webvirtua.gestaodesinistros.model.entity.Person;
+import br.com.webvirtua.gestaodesinistros.service.CustumerService;
 import br.com.webvirtua.gestaodesinistros.service.PersonService;
 import br.com.webvirtua.gestaodesinistros.utils.Status;
 import br.com.webvirtua.gestaodesinistros.utils.ReturnRequest;
 
 @RestController
-@RequestMapping("/v1/persons")
-public class PersonController {
+@RequestMapping("/v1/custumers")
+public class CustumerController {
 
-	private PersonService<Person> service;
+	private CustumerService<Custumer> service;
 	
 	@Autowired
 	private Status status;
@@ -39,13 +42,13 @@ public class PersonController {
 	@Autowired
 	private HttpServletResponse response;
 
-	public PersonController(PersonService<Person> service) {
+	public CustumerController(CustumerService<Custumer> service) {
 		this.service = service;	
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ReturnRequest create(@RequestBody @Valid PersonDTO dto) {		
+	public ReturnRequest create(@RequestBody @Valid CustumerDTO dto) {		
 		
 		try {
 		
@@ -119,7 +122,7 @@ public class PersonController {
 	}
 
 	@PutMapping("{id}")
-	public ReturnRequest update(@Valid @PathVariable Long id, @RequestBody PersonDTO dto) {
+	public ReturnRequest update(@Valid @PathVariable Long id, @RequestBody CustumerDTO dto) {
 		try {
 //			this.verifyName(user.getName());
 //			this.verifyEmail(user.getName());

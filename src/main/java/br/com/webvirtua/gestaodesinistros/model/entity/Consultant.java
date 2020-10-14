@@ -13,7 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,15 +34,14 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Entity
 @Table
+@PrimaryKeyJoinColumn(referencedColumnName="id")
 public class Consultant extends Person implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7769427416045450081L;
 	
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idConsultant;
-	
+	@NotBlank
+	@Size(max = 255)
 	private String password;
 }

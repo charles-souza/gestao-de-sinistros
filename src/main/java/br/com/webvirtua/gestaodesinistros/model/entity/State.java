@@ -37,7 +37,7 @@ public class State implements Serializable{
 	private Long id_state;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="state_id", referencedColumnName="id_country")
+	@JoinColumn(name="country_id", referencedColumnName="id_country")
 	private Country country;
 	
 	private String initials;

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotEmpty;
 
+import br.com.webvirtua.gestaodesinistros.model.entity.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,24 +24,10 @@ public class PersonDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = -1244646979381515229L;
 	
-	@NotEmpty
-	private String name;
-	
-	@NotEmpty
-	private String lastName;
-	
-//	private Enum<?> type;
-	private String street;
-	private int number;
-	private String complement;
-	private String district;
-	private String zipcode;
-	
-	private String city;
-	
-	private String state;
-	
-	@NotEmpty
+	private String firstName;	
+	private String lastName;	
+	private Address address;	
+	private Long city_id;	
 	private String rg;
 	private String emitter;
 	private String expedition;

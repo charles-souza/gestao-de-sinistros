@@ -24,22 +24,18 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@DiscriminatorValue("client")
+@DiscriminatorValue("custumer")
 @Accessors(chain = true)
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table
-public class Client extends Person implements Serializable{
+public class Custumer extends Person implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7769427416045450081L;
-	
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Long idCliente;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="phone_id", referencedColumnName="id")

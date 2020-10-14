@@ -1,23 +1,18 @@
 package br.com.webvirtua.gestaodesinistros.service;
 
-import java.util.Optional;
+import br.com.webvirtua.gestaodesinistros.api.dto.ConsultantDTO;
+import br.com.webvirtua.gestaodesinistros.utils.ReturnRequest;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+public interface ConsultantService<C>{
 
-import br.com.webvirtua.gestaodesinistros.model.entity.Client;
-import br.com.webvirtua.gestaodesinistros.model.entity.Consultant;
+	ReturnRequest save(ConsultantDTO any);
 
-public interface ConsultantService {
+	ReturnRequest getById(Long id);
 
-	Consultant save(Consultant any);
+	ReturnRequest delete(Long id);
 
-	Optional<Consultant> getById(Long id);
+	ReturnRequest update(Long id, ConsultantDTO consultantDTO);
 
-	void delete(Consultant consultant);
-
-	Consultant update(Consultant consultant);
-
-	Page<Consultant> find( Consultant filter, Pageable pageRequest);
+	ReturnRequest find();
 
 }

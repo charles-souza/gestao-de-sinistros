@@ -8,25 +8,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.webvirtua.gestaodesinistros.api.dto.CustumerDTO;
 import br.com.webvirtua.gestaodesinistros.api.dto.PersonDTO;
+import br.com.webvirtua.gestaodesinistros.model.entity.Custumer;
 import br.com.webvirtua.gestaodesinistros.model.entity.Person;
+import br.com.webvirtua.gestaodesinistros.model.repository.CustumerRepository;
 import br.com.webvirtua.gestaodesinistros.model.repository.PersonRepository;
+import br.com.webvirtua.gestaodesinistros.service.CustumerService;
 import br.com.webvirtua.gestaodesinistros.service.PersonService;
 import br.com.webvirtua.gestaodesinistros.utils.Status;
 import br.com.webvirtua.gestaodesinistros.utils.ReturnRequest;
 
 @Service
-public class PersonServiceImpl implements PersonService {
+public class CustumerServiceImpl implements CustumerService {
 
-	private PersonRepository personRepository;
+	private CustumerRepository custumerRepository;
 	
 	private ModelMapper modelMapper;
 	
 	@Autowired
 	private Status status;
 
-	public PersonServiceImpl(PersonRepository repository, ModelMapper modelMapper) {
-		this.personRepository = repository;
+	public CustumerServiceImpl(CustumerRepository repository, ModelMapper modelMapper) {
+		this.custumerRepository = repository;
 		this.modelMapper = modelMapper;
 		
 //		PropertyMap<Person, PersonDTO> personMap = new PropertyMap<Person, PersonDTO>() {
@@ -49,20 +53,20 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	@Transactional
-	public ReturnRequest save(PersonDTO person) {
+	public ReturnRequest save(CustumerDTO custumer) {
 //		if( repository.existsById(pessoa.getId()) ) {
 //			throw new BusinessException("Id já cadastrado.");
 //		}
 		
-		Person entity = this.modelMapper.map(person, Person.class);
+		Custumer entity = this.modelMapper.map(custumer, Custumer.class);
 		
-		Person personAdded = personRepository.save(entity);
+		Custumer personAdded = custumerRepository.save(entity);
 		
 		ReturnRequest resultRequest = ReturnRequest.builder()
 				.success(1)
 				.status(status.getCode201())
 				.totalResults(1)
-				.successMessage("Usuário inserido com sucesso")
+				.successMessage("Cliente inserido com sucesso")
 				.data(personAdded)
 				.build();
 
@@ -72,7 +76,7 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public ReturnRequest getById(Long id) {
 		
-		Optional<Person> person = personRepository.findById(id);
+		Optional<Custumer> person = custumerRepository.findById(id);
 		
 		ReturnRequest resultRequest = ReturnRequest.builder()
 				.success(1)
@@ -88,28 +92,28 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public ReturnRequest delete(Long id) {
 		if(id == null) {
-			throw new IllegalArgumentException("Pessoa id cant be null.");
+			throw new IllegalArgumentException("Custumer id cant be null.");
 		}
-		this.personRepository.deleteById(id);
+		this.custumerRepository.deleteById(id);
 		
 		ReturnRequest resultRequest = ReturnRequest.builder()
 				.success(1)
 				.status(status.getCode200())
-				.successMessage("Usuário excluído com sucesso")
+				.successMessage("Cliente excluído com sucesso")
 				.build();
 		
 		return resultRequest;
 	}
 
 	@Override
-	public ReturnRequest update(Long id, PersonDTO personDTO) {
-		if(personDTO == null || id == null) {
+	public ReturnRequest update(Long id, CustumerDTO custumerDTO) {
+		if(custumerDTO == null || id == null) {
 			throw new IllegalArgumentException("Pessoa id cant be null.");
 		}
-		Person entity = this.modelMapper.map(personDTO, Person.class);
+		Custumer entity = this.modelMapper.map(custumerDTO, Custumer.class);
 		entity.setId(id);
 		
-		Person personUpdated = personRepository.save(entity);
+		Custumer personUpdated = custumerRepository.save(entity);
 		
 		ReturnRequest resultRequest = ReturnRequest.builder()
 				.success(1)
@@ -124,17 +128,17 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public ReturnRequest find() {
-		List<Person> persons = personRepository.findAll();
+		List<Custumer> custumer = custumerRepository.findAll();
 
 		ReturnRequest resultRequest = ReturnRequest.builder()
 				.success(1)
 				.status(status.getCode200())
-				.totalResults(persons.size())
+				.totalResults(custumer.size())
 				.resultsPerPage(0)
 				.totalPages(0)
 				.page(0)
 				.successMessage("Resultados Obtidos")
-				.data(persons)
+				.data(custumer)
 				.build();
 		
 		return resultRequest;
